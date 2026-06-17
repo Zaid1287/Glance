@@ -1,0 +1,326 @@
+@property --p { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+:root {
+  --bg:       oklch(0.16 0.004 256);
+  --bg-2:     oklch(0.13 0.004 256);
+  --ink:      oklch(0.975 0.004 256);
+  --muted:    oklch(0.73 0.012 256);
+  --faint:    oklch(0.58 0.012 256);
+  --blue:     oklch(0.66 0.155 250);
+  --blue-hi:  oklch(0.82 0.11 238);
+  --green:    oklch(0.80 0.16 152);
+  --orange:   oklch(0.78 0.16 60);
+  /* liquid glass */
+  --glass:    oklch(0.28 0.008 256 / 0.42);
+  --glass-2:  oklch(0.32 0.009 256 / 0.55);
+  --glass-bd: color-mix(in oklch, white 10%, transparent);
+  --glass-hi: color-mix(in oklch, white 16%, transparent);
+  /* solid raised surface — for non-product elements (no blur) */
+  --surface:    oklch(0.205 0.005 256);
+  --surface-bd: color-mix(in oklch, white 7%, transparent);
+  --ease:     cubic-bezier(0.16, 1, 0.3, 1);
+  --maxw: 1080px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Hanken Grotesk", -apple-system, system-ui, sans-serif;
+  color: var(--ink); background: var(--bg);
+  min-height: 100vh; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+
+/* dark-grey base + a static, restrained blue glow (no purple, no drifting blob) */
+.ambient {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(58vmax 48vmax at 78% -10%, oklch(0.5 0.12 245 / 0.16), transparent 62%),
+    radial-gradient(50vmax 50vmax at 6% 106%, oklch(0.44 0.05 256 / 0.26), transparent 62%),
+    var(--bg);
+}
+
+a { color: var(--blue-hi); text-decoration: none; }
+a:hover { color: var(--ink); }
+code, .prompt { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+/* liquid glass — reserved for the product surfaces (install pill, phone mock).
+   Earns the "real Mac/iOS surface" metaphor instead of coating everything. */
+.glass, .install {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+          backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid var(--glass-bd);
+  box-shadow: inset 0 1px 0 var(--glass-hi), 0 24px 60px oklch(0 0 0 / 0.45);
+}
+
+/* everything else: solid raised surface, no blur */
+.tile, .get-mac, .get-ios, .waitlist-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-bd);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.35);
+}
+
+/* ---------- nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px max(20px, 5vw);
+  background: oklch(0.16 0.004 256 / 0.6);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--glass-bd);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--ink); }
+.brand-icon { width: 30px; height: 30px; border-radius: 8px; }
+.nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 30px); font-size: 15px; }
+.nav-links a { color: var(--muted); }
+.nav-links a:hover { color: var(--ink); }
+.nav-gh { padding: 7px 15px; border: 1px solid var(--glass-bd); border-radius: 999px; color: var(--ink) !important; }
+.nav-gh:hover { background: var(--glass); }
+@media (max-width: 620px) { .nav-links a:not(.nav-gh) { display: none; } }
+
+main { max-width: var(--maxw); margin: 0 auto; padding: 0 max(20px, 5vw); }
+section { padding: clamp(60px, 11vw, 128px) 0; }
+
+/* ---------- hero ---------- */
+.hero {
+  display: grid; grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: clamp(24px, 5vw, 64px);
+  padding-top: clamp(56px, 9vw, 104px);
+}
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: clamp(32px, 8vw, 48px); }
+  .hero-stage { min-height: 0; order: 2; }
+  .ring { width: min(360px, 84vw); }
+}
+.hero h1 {
+  font-family: "Bricolage Grotesque", sans-serif; font-weight: 800;
+  font-size: clamp(54px, 9vw, 92px); line-height: 0.94; letter-spacing: -0.035em; text-wrap: balance;
+}
+.lede { color: var(--muted); font-size: clamp(17px, 2.1vw, 21px); max-width: 31ch; margin-top: 22px; }
+.cta { margin-top: 30px; }
+
+.install {
+  display: flex; align-items: center; gap: 10px;
+  border-radius: 14px; padding: 12px 12px 12px 16px;
+}
+.install .prompt { color: var(--blue-hi); font-weight: 700; }
+.install code { flex: 1; min-width: 0; font-size: 13px; color: var(--ink); overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.install code::-webkit-scrollbar { display: none; }
+.install button {
+  flex: none; width: 38px; height: 34px; display: grid; place-items: center; cursor: pointer;
+  border: 0; border-radius: 9px; background: var(--ink); color: oklch(0.16 0.004 256);
+  transition: transform .2s var(--ease), background .2s var(--ease);
+}
+.install button:hover { background: var(--blue-hi); }
+.install button:active { transform: scale(0.92); }
+.install .i-check { display: none; }
+.install button.copied .i-copy { display: none; }
+.install button.copied .i-check { display: block; }
+.cta-sub { margin-top: 14px; color: var(--muted); font-size: 14px; }
+
+/* ---------- waitlist form ---------- */
+.waitlist {
+  display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap;
+  max-width: 460px;
+}
+.waitlist input[type="email"] {
+  flex: 1 1 220px; min-width: 0;
+  padding: 13px 16px; border-radius: 13px;
+  background: var(--glass); border: 1px solid var(--glass-bd);
+  color: var(--ink); font-size: 16px; font-family: inherit;
+  -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px);
+  transition: border-color .2s var(--ease);
+}
+.waitlist input::placeholder { color: var(--faint); }
+.waitlist input:focus { outline: none; border-color: var(--blue); }
+.waitlist button {
+  flex: 0 0 auto; padding: 13px 22px; border: 0; border-radius: 13px; cursor: pointer;
+  background: var(--blue); color: oklch(0.16 0.004 256); font-weight: 700; font-size: 15px;
+  transition: transform .2s var(--ease), background .2s var(--ease);
+}
+.waitlist button:hover { background: var(--blue-hi); }
+.waitlist button:active { transform: scale(0.97); }
+.waitlist.done input, .waitlist.done button { display: none; }
+.waitlist-msg { margin-top: 12px; font-size: 15px; font-weight: 600; color: var(--green); display: none; }
+.waitlist-msg.show { display: block; }
+.waitlist-msg.err { color: var(--blue-hi); }
+
+.waitlist-card { max-width: 560px; padding: clamp(24px, 5vw, 36px); border-radius: 22px; }
+.waitlist-card > p { color: var(--muted); font-size: clamp(15px, 2vw, 17px); margin-bottom: 20px; }
+.waitlist-card .small { margin-top: 14px; }
+@media (max-width: 480px) {
+  .waitlist { flex-direction: column; }
+  .waitlist input[type="email"], .waitlist button { flex: 1 1 auto; width: 100%; }
+}
+
+/* hero stage: blue ring + glass phone */
+.hero-stage { position: relative; display: grid; place-items: center; min-height: 440px; }
+.ring {
+  position: absolute; width: min(420px, 78vw); aspect-ratio: 1; border-radius: 50%;
+  background: conic-gradient(from -90deg, var(--blue), var(--blue-hi) var(--p), transparent 0);
+  -webkit-mask: radial-gradient(closest-side, transparent 67%, #000 68%);
+          mask: radial-gradient(closest-side, transparent 67%, #000 68%);
+  filter: drop-shadow(0 0 30px oklch(0.6 0.16 245 / 0.5));
+}
+/* ring tracks the same progress as the Live Activity bar (driven by motion.js):
+   --p sweeps with the fill, and it turns green when the bar completes.
+   No-JS shows the finished ring so it never reads as empty. */
+.ring.full, html:not(.js) .ring {
+  background: conic-gradient(from -90deg, var(--green), var(--green) var(--p), transparent 0);
+  filter: drop-shadow(0 0 30px oklch(0.72 0.16 152 / 0.45));
+}
+html:not(.js) .ring { --p: 360deg; }
+
+.phone {
+  position: relative; width: min(330px, 80vw); padding: 16px; border-radius: 30px;
+  background: oklch(0.18 0.005 256 / 0.7); cursor: pointer;
+}
+.la { background: oklch(0.22 0.006 256 / 0.6); border: 1px solid var(--glass-bd); border-radius: 20px; padding: 16px;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.la-top { display: flex; align-items: center; gap: 10px; }
+.la-icon { position: relative; width: 22px; height: 22px; color: var(--blue-hi); flex: none; }
+.la-icon svg { position: absolute; inset: 0; }
+.la-done { color: var(--green); opacity: 0; transition: opacity .4s var(--ease); }
+.la-name { font-weight: 600; font-size: 15px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.la-status { font-size: 14px; font-variant-numeric: tabular-nums; }
+.la-status .pct { color: var(--blue-hi); font-weight: 600; font-variant-numeric: tabular-nums; }
+.la-status .word { color: var(--green); font-weight: 700; display: none; }
+.la-bar { margin: 14px 0 10px; height: 11px; border-radius: 99px; background: color-mix(in oklch, white 12%, transparent); overflow: hidden; }
+.la-fill { display: block; position: relative; height: 100%; width: 0; border-radius: 99px;
+  overflow: hidden;
+  background: linear-gradient(90deg in oklch, var(--orange), var(--blue) 55%, var(--blue-hi));
+  box-shadow: 0 0 8px var(--blue), 0 0 16px color-mix(in oklch, var(--blue-hi) 50%, transparent); }
+/* lightning glint sweeping the filled length (matches the iOS bar) */
+.la-fill::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 32%;
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.95), color-mix(in oklch, var(--blue-hi) 60%, transparent), transparent);
+  filter: blur(1px); animation: glint 1s linear infinite;
+}
+@keyframes glint { from { transform: translateX(-130%); } to { transform: translateX(330%); } }
+.la-meta { font-size: 12.5px; color: var(--muted); }
+.la-meta .meta-done { color: var(--green); display: none; }
+
+/* JS drives the fill width + the % counter (motion.js), then adds .done.
+   No-JS shows the finished state so the mock never reads as broken. */
+html:not(.js) .la-fill { width: 100%; background: linear-gradient(90deg, var(--green), var(--green)); }
+html:not(.js) .la-status .pct, html:not(.js) .la-meta .meta-run { display: none; }
+html:not(.js) .la-status .word, html:not(.js) .la-meta .meta-done { display: inline; }
+html:not(.js) .la-icon .la-dl { opacity: 0; }
+html:not(.js) .la-icon .la-done { opacity: 1; }
+.phone.done .la-fill { width: 100%; background: linear-gradient(90deg, var(--green), var(--green)); box-shadow: none; }
+.phone.done .la-fill::after { display: none; }
+.phone.done .la-icon .la-dl { opacity: 0; }
+.phone.done .la-icon .la-done { opacity: 1; }
+.phone.done .la-status .pct { display: none; }
+.phone.done .la-status .word { display: inline; }
+.phone.done .la-meta .meta-run { display: none; }
+.phone.done .la-meta .meta-done { display: inline; }
+
+/* ---------- section headings ---------- */
+.how h2, .features h2, .get h2 {
+  font-family: "Bricolage Grotesque", sans-serif; font-weight: 700;
+  font-size: clamp(28px, 4.4vw, 44px); letter-spacing: -0.02em; line-height: 1.05;
+  text-wrap: balance; max-width: 18ch; margin-bottom: clamp(28px, 5vw, 52px);
+}
+
+/* ---------- how it works (kept the pulse flow) ---------- */
+.flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; }
+.node { flex: 1 1 200px; padding: 24px; border-radius: 18px; }
+.node-h { font-weight: 700; font-size: 17px; margin-bottom: 6px; }
+.node p { color: var(--muted); font-size: 14.5px; }
+.wire { flex: 0 0 56px; position: relative; align-self: center; height: 2px;
+  background: linear-gradient(90deg, var(--glass-bd), var(--blue)); }
+.wire .pulse { position: absolute; top: 50%; left: 0; width: 8px; height: 8px; margin-top: -4px;
+  border-radius: 50%; background: var(--blue-hi); box-shadow: 0 0 12px var(--blue-hi);
+  animation: travel 2.4s var(--ease) infinite; }
+@keyframes travel { 0% { left: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+.how-foot { margin-top: 26px; color: var(--muted); max-width: 62ch; font-size: 16px; }
+.how-foot em { color: var(--ink); font-style: normal; font-weight: 600; }
+@media (max-width: 700px) {
+  .wire { flex-basis: 100%; width: 2px; height: 34px; background: linear-gradient(180deg, var(--glass-bd), var(--blue)); }
+  .wire .pulse { animation: travelv 2.4s var(--ease) infinite; }
+  @keyframes travelv { 0% { top: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+}
+
+/* ---------- features bento ---------- */
+/* 6-col grid; rows resolve to [6] / [4+2] / [3+3] — no empty cells, no
+   tall-tile gap. The snippet tile is widest; the rest stay balanced. */
+.bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.tile { grid-column: span 3; padding: 26px; border-radius: 20px;
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease); }
+.b-6 { grid-column: span 6; }
+.b-4 { grid-column: span 4; }
+.b-3 { grid-column: span 3; }
+.b-2 { grid-column: span 2; }
+.tile-snippet { display: flex; flex-direction: column; }
+.tile:hover { transform: translateY(-4px); border-color: var(--glass-bd); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 18px 40px oklch(0 0 0 / 0.45); }
+.tile h3 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -0.01em; margin-bottom: 8px; }
+.tile p { color: var(--muted); font-size: 15px; }
+.tile code { color: var(--blue-hi); font-size: 13px; }
+.tile .snippet { display: block; white-space: pre; margin: 14px 0; padding: 14px; border-radius: 12px;
+  background: oklch(0.1 0.004 256 / 0.7); border: 1px solid var(--glass-bd); color: var(--ink); font-size: 12.5px; overflow-x: auto; }
+.tile-foot { margin-top: auto; padding-top: 14px; font-size: 13px !important; }
+@media (max-width: 760px) { .bento { grid-template-columns: 1fr; }
+  .tile, .b-6, .b-4, .b-3, .b-2 { grid-column: 1 / -1; } }
+
+/* ---------- get ---------- */
+/* Mac and iPhone stacked one over the other. */
+.get-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.get-mac, .get-ios { padding: 28px; border-radius: 20px; }
+.get-mac h3, .get-ios h3 { font-family: "Bricolage Grotesque", sans-serif; font-size: 22px; margin-bottom: 8px; }
+.get-mac p, .get-ios p { color: var(--muted); font-size: 15px; }
+.install-lg { margin-top: 16px; }
+.btn { display: inline-block; margin: 14px 0 6px; padding: 11px 20px; border-radius: 999px;
+  background: var(--ink); color: oklch(0.16 0.004 256); font-weight: 600; white-space: nowrap;
+  transition: transform .2s var(--ease), background .2s var(--ease); }
+.btn:hover { background: var(--blue-hi); }
+.btn:active { transform: scale(0.97); }
+.small { font-size: 13px; color: var(--faint); }
+
+/* ---------- about / footer ---------- */
+.about { text-align: center; }
+.about p { color: var(--muted); font-size: clamp(17px, 2.2vw, 22px); max-width: 46ch; margin: 0 auto; text-wrap: pretty; }
+.about .links { display: flex; gap: 22px; justify-content: center; margin-top: 22px; font-size: 15px; }
+.about .links a { color: var(--muted); }
+.about .links a:hover { color: var(--ink); }
+footer { text-align: center; color: var(--faint); padding: 36px 0 56px; font-size: 13px; border-top: 1px solid var(--glass-bd); }
+
+/* ---------- motion: hero plays on load (CSS), below-fold reveals on scroll (JS) ---------- */
+.rise { animation: rise .9s var(--ease) both; animation-delay: calc(var(--d, 0) * 1s); }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+html.js .reveal { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+html.js .reveal.in { opacity: 1; transform: none; filter: blur(0);
+  transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .wire .pulse, .rise { animation: none; }
+  .ring { --p: 360deg; background: conic-gradient(from -90deg, var(--green), var(--green) var(--p), transparent 0); }
+  html.js .reveal, html.js .reveal.in, .rise { opacity: 1; transform: none; filter: none; transition: none; }
+  .la-fill { width: 100%; background: linear-gradient(90deg, var(--green), var(--green)); box-shadow: none; }
+  .la-fill::after { animation: none; display: none; }
+  .la-status .pct { display: none; } .la-status .word { display: inline; }
+  .la-icon .la-dl { display: none; } .la-icon .la-done { opacity: 1; }
+  .la-meta .meta-run { display: none; } .la-meta .meta-done { display: inline; }
+}
+
+/* ---------- legal pages ---------- */
+.legal { max-width: 760px; margin: 0 auto; padding: clamp(48px, 9vw, 96px) max(20px, 6vw) 80px; }
+.legal .back { display: inline-block; margin-bottom: 28px; color: var(--blue-hi); font-size: 14px; }
+.legal h1 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: clamp(34px, 6vw, 52px); letter-spacing: -0.02em; line-height: 1.04; }
+.legal .updated { color: var(--faint); font-size: 14px; margin: 10px 0 8px; }
+.legal .toc { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 22px 0 12px; font-size: 15px; }
+.legal .toc a { color: var(--muted); }
+.legal .toc a:hover { color: var(--ink); }
+.legal article { padding: clamp(28px, 5vw, 44px) 0; border-top: 1px solid var(--glass-bd); }
+.legal h2 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: clamp(24px, 4vw, 32px); letter-spacing: -0.01em; margin-bottom: 6px; scroll-margin-top: 80px; }
+.legal h3 { font-weight: 700; font-size: 17px; margin: 22px 0 6px; color: var(--ink); }
+.legal p, .legal li { color: var(--muted); font-size: 16px; line-height: 1.7; }
+.legal p { margin: 12px 0; }
+.legal ul { margin: 10px 0 10px 20px; }
+.legal li { margin: 6px 0; }
+.legal strong { color: var(--ink); }
+.legal code { font-size: 13.5px; color: var(--blue-hi); }
+.legal a { color: var(--blue-hi); }
+.legal .disclaim { margin-top: 14px; color: var(--faint); font-size: 13.5px; font-style: italic; }

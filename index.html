@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glance — is it done yet?</title>
+  <meta name="description" content="Track long-running Mac tasks from your iPhone. A Live Activity for every download, build, render and training run. Zero config, end-to-end encrypted." />
+  <meta property="og:title" content="Glance — is it done yet?" />
+  <meta property="og:description" content="Your Mac's long tasks, glanceable from your iPhone Lock Screen. Encrypted, zero-config. Join the waitlist." />
+  <meta property="og:image" content="icon.png" />
+  <meta name="theme-color" content="#0a1f6e" />
+  <link rel="icon" href="icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="motion.js" defer></script>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#top">
+      <img src="icon.png" alt="" class="brand-icon" />
+      <span>Glance</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a class="nav-gh" href="#get">Join waitlist</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-copy">
+        <h1 class="rise" style="--d:.05s">Is it<br />done yet?</h1>
+        <p class="lede rise" style="--d:.14s">
+          Your Mac is grinding through a download, a build, a render, a training run.
+          Walk away. Glance puts its progress on your iPhone Lock Screen. Live,
+          encrypted, zero setup.
+        </p>
+
+        <div class="cta rise" style="--d:.23s">
+          <form class="waitlist" action="[WAITLIST_ENDPOINT]" method="POST" novalidate>
+            <input type="email" name="email" required placeholder="you@example.com" autocomplete="email" aria-label="Email address" />
+            <button type="submit">Join the waitlist</button>
+          </form>
+          <p class="cta-sub">Coming to the App Store for iPhone, with a Mac companion. <a href="#get">Be first →</a></p>
+        </div>
+      </div>
+
+      <!-- Animated product mock: the Live Activity, filling and finishing -->
+      <div class="hero-stage rise" style="--d:.18s">
+        <div class="ring" aria-hidden="true"></div>
+        <div class="phone" id="mock" role="img" aria-label="A Glance Live Activity on an iPhone, filling to 100% then showing Done">
+          <div class="la">
+            <div class="la-top">
+              <span class="la-icon">
+                <svg class="la-dl" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+                <svg class="la-done" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span class="la-name">Final_Render.mov</span>
+              <span class="la-status"><span class="pct"></span><span class="word">Done</span></span>
+            </div>
+            <div class="la-bar"><i class="la-fill"></i></div>
+            <div class="la-meta"><span class="meta-run">412 MB · 18 MB/s</span><span class="meta-done">Done · 41s</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+      <h2 class="reveal" data-i="0">From your Mac to your wrist, encrypted the whole way.</h2>
+      <div class="flow">
+        <div class="node reveal" data-i="1">
+          <div class="node-h">Mac</div>
+          <p>Auto-detects the task. No script, no webhook.</p>
+        </div>
+        <div class="wire reveal" data-i="2"><span class="pulse"></span></div>
+        <div class="node reveal" data-i="3">
+          <div class="node-h">Encrypted LAN</div>
+          <p>ChaCha20-Poly1305 over MultipeerConnectivity.</p>
+        </div>
+        <div class="wire reveal" data-i="4"><span class="pulse" style="animation-delay:.6s"></span></div>
+        <div class="node reveal" data-i="5">
+          <div class="node-h">iPhone &amp; Watch</div>
+          <p>A Live Activity that fills, finishes, and buzzes.</p>
+        </div>
+      </div>
+      <p class="how-foot reveal" data-i="6">Only task <em>metadata</em> ever leaves the Mac, never your files or output. It's sealed with a key only your two devices hold.</p>
+    </section>
+
+    <!-- FEATURES (bento, varied sizes) -->
+    <section class="features" id="features">
+      <h2 class="reveal" data-i="0">Built to disappear into your workflow.</h2>
+      <div class="bento">
+        <article class="tile b-6 reveal" data-i="1">
+          <h3>It just notices.</h3>
+          <p>Browser downloads, <code>npm</code> · <code>pip</code> · <code>cargo</code> · <code>xcodebuild</code> · <code>docker</code> · <code>rsync</code>, all detected automatically — the thing a send-a-webhook service can't do.</p>
+        </article>
+        <article class="tile b-4 tile-snippet reveal" data-i="2">
+          <h3>A real progress bar.</h3>
+          <p>Wrap anything and watch it fill on your phone:</p>
+          <code class="snippet">glance run --progress '([0-9]+)%' \
+  -- python train.py</code>
+          <p class="tile-foot">Lock Screen · Dynamic Island · Watch Smart Stack.</p>
+        </article>
+        <article class="tile b-2 reveal" data-i="3">
+          <h3>Private by design</h3>
+          <p>End-to-end encrypted, loopback by default, zero telemetry.</p>
+        </article>
+        <article class="tile b-3 reveal" data-i="4">
+          <h3>On your wrist</h3>
+          <p>The same Live Activity in the Apple Watch Smart Stack. No extra app.</p>
+        </article>
+        <article class="tile b-3 reveal" data-i="5">
+          <h3>Menu-bar native</h3>
+          <p>Lives quietly in the menu bar. One click copies your pairing key.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- WAITLIST -->
+    <section class="get" id="get">
+      <h2 class="reveal" data-i="0">Be first when Glance lands.</h2>
+      <div class="waitlist-card reveal" data-i="1">
+        <p>Glance is coming to the App Store — iPhone, Apple Watch (Smart Stack), and the
+          Mac companion. Join the waitlist and we'll send one email the day it's live.
+          No spam, ever.</p>
+        <form class="waitlist" action="[WAITLIST_ENDPOINT]" method="POST" novalidate>
+          <input type="email" name="email" required placeholder="you@example.com" autocomplete="email" aria-label="Email address" />
+          <button type="submit">Notify me</button>
+        </form>
+        <p class="small">macOS · iPhone · Apple Watch · end-to-end encrypted</p>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about">
+      <p class="reveal" data-i="0">
+        Glance does one job: the “is it done yet?” moment. Not remote desktop, not a
+        server monitor — a fast, private glance at whatever your Mac is working on.
+      </p>
+      <p class="links reveal" data-i="1">
+        <a href="legal.html#privacy">Privacy</a>
+        <a href="legal.html#terms">Terms</a>
+        <a href="legal.html#data">Data &amp; Compliance</a>
+        <a href="legal.html#ip">IP</a>
+      </p>
+    </section>
+  </main>
+
+  <footer><p>Glance · © 2026 · <a href="legal.html#privacy">Privacy</a> · <a href="legal.html#terms">Terms</a></p></footer>
+</body>
+</html>
