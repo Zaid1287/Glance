@@ -96,17 +96,25 @@
         return;
       }
       show("Joining…");
+      // Google Forms blocks reading the response (no-CORS), so we fire-and-forget
+      // and confirm optimistically. Other providers (Formspree, etc.) return JSON
+      // we can actually check.
+      const isGoogle = endpoint.includes("docs.google.com");
+      const ok = () => { form.classList.add("done"); show("You're on the list ✓ We'll email you when Glance is live."); };
       fetch(endpoint, {
         method: "POST",
-        headers: { Accept: "application/json" },
+        mode: isGoogle ? "no-cors" : "cors",
+        headers: isGoogle ? {} : { Accept: "application/json" },
         body: new FormData(form),
       })
         .then((r) => {
-          if (!r.ok) throw new Error("bad status");
-          form.classList.add("done");
-          show("You're on the list ✓ We'll email you when Glance is live.");
+          if (!isGoogle && !r.ok) throw new Error("bad status");
+          ok();
         })
-        .catch(() => show("Something went wrong — try again in a moment.", true));
+        .catch(() => {
+          if (isGoogle) ok();   // no-CORS resolves opaque; only real network errors land here
+          else show("Something went wrong — try again in a moment.", true);
+        });
     });
   }
   document.querySelectorAll("form.waitlist").forEach(wireWaitlist);
