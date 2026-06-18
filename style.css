@@ -324,3 +324,8 @@ html.js .reveal.in { opacity: 1; transform: none; filter: blur(0);
 .legal code { font-size: 13.5px; color: var(--blue-hi); }
 .legal a { color: var(--blue-hi); }
 .legal .disclaim { margin-top: 14px; color: var(--faint); font-size: 13.5px; font-style: italic; }
+
+/* support / fund-the-launch line */
+.fund { margin-top: 12px; max-width: 46ch; }
+.fund a { color: var(--blue-hi); font-weight: 600; }
+.fund a:hover { color: var(--ink); }
