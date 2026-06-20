@@ -119,6 +119,14 @@ section { padding: clamp(60px, 11vw, 128px) 0; }
 .install .i-check { display: none; }
 .install button.copied .i-copy { display: none; }
 .install button.copied .i-check { display: block; }
+/* On phones the long curl command's nowrap min-content forced the cards (and
+   the whole page) wider than the viewport. Let it wrap instead of scroll, and
+   pin card/grid min-width to 0 so nothing can blow out the layout width. */
+@media (max-width: 700px) {
+  .install { align-items: flex-start; }
+  .install code { white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: visible; }
+  .get-grid, .get-mac, .get-ios { min-width: 0; }
+}
 .cta-sub { margin-top: 14px; color: var(--muted); font-size: 14px; }
 
 /* ---------- waitlist form ---------- */
