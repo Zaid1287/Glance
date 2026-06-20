@@ -69,53 +69,18 @@
     mock.addEventListener("click", play);
   }
 
-  // Waitlist forms: post the email to the configured endpoint and confirm inline.
-  // Until [WAITLIST_ENDPOINT] is replaced with a real form URL (Formspree, Tally,
-  // Buttondown, …), we show a friendly "opening soon" note instead of erroring.
-  function wireWaitlist(form) {
-    const input = form.querySelector('input[type="email"]');
-    const msg = document.createElement("p");
-    msg.className = "waitlist-msg";
-    form.insertAdjacentElement("afterend", msg);
-
-    const show = (text, isErr) => {
-      msg.textContent = text;
-      msg.classList.toggle("err", !!isErr);
-      msg.classList.add("show");
-    };
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = (input.value || "").trim();
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { show("Enter a valid email.", true); return; }
-
-      const endpoint = form.getAttribute("action") || "";
-      if (endpoint.includes("[")) {            // placeholder not yet wired
-        form.classList.add("done");
-        show("Thanks! The waitlist opens shortly — check back soon.");
-        return;
-      }
-      show("Joining…");
-      // Google Forms blocks reading the response (no-CORS), so we fire-and-forget
-      // and confirm optimistically. Other providers (Formspree, etc.) return JSON
-      // we can actually check.
-      const isGoogle = endpoint.includes("docs.google.com");
-      const ok = () => { form.classList.add("done"); show("You're on the list ✓ We'll email you when Glance is live."); };
-      fetch(endpoint, {
-        method: "POST",
-        mode: isGoogle ? "no-cors" : "cors",
-        headers: isGoogle ? {} : { Accept: "application/json" },
-        body: new FormData(form),
-      })
-        .then((r) => {
-          if (!isGoogle && !r.ok) throw new Error("bad status");
-          ok();
-        })
-        .catch(() => {
-          if (isGoogle) ok();   // no-CORS resolves opaque; only real network errors land here
-          else show("Something went wrong — try again in a moment.", true);
-        });
+  // Copy-to-clipboard for the install command (icon swaps to a check).
+  function wireCopy(btnId, codeId) {
+    const btn = document.getElementById(btnId);
+    const code = document.getElementById(codeId);
+    if (!btn || !code) return;
+    btn.addEventListener("click", () => {
+      navigator.clipboard.writeText(code.textContent.trim()).then(() => {
+        btn.classList.add("copied");
+        setTimeout(() => btn.classList.remove("copied"), 1600);
+      });
     });
   }
-  document.querySelectorAll("form.waitlist").forEach(wireWaitlist);
+  wireCopy("copy", "cmd");
+  wireCopy("copy2", "cmd2");
 })();
