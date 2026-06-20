@@ -16,7 +16,12 @@
     },
     { threshold: 0.16, rootMargin: "0px 0px -8% 0px" }
   );
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  const reveals = document.querySelectorAll(".reveal");
+  reveals.forEach((el) => io.observe(el));
+  // Safety net: never let content stay invisible if the observer doesn't fire
+  // (odd viewports, restored scroll, some mobile browsers). Reveal all after a
+  // grace period — by then any scroll choreography has already played.
+  setTimeout(() => reveals.forEach((el) => el.classList.add("in")), 2000);
 
   // Live-Activity mock: JS drives the fill width + the % counter so the number
   // actually counts up (an animated CSS counter() doesn't render in Safari or

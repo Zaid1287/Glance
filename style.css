@@ -237,9 +237,11 @@ html:not(.js) .la-icon .la-done { opacity: 1; }
 .how-foot { margin-top: 26px; color: var(--muted); max-width: 62ch; font-size: 16px; }
 .how-foot em { color: var(--ink); font-style: normal; font-weight: 600; }
 @media (max-width: 700px) {
-  .wire { flex-basis: 100%; width: 2px; height: 34px; background: linear-gradient(180deg, var(--glass-bd), var(--blue)); }
-  .wire .pulse { animation: travelv 2.4s var(--ease) infinite; }
-  @keyframes travelv { 0% { top: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+  /* Stack the flow vertically; drop the connector wires — at this width
+     flex-basis:100% blew them up into full-width blue blocks. */
+  .flow { flex-direction: column; gap: 14px; }
+  .wire { display: none; }
+  .node { flex: 1 1 auto; width: 100%; padding: 4px 0; }
 }
 
 /* ---------- features bento ---------- */
