@@ -342,3 +342,9 @@ html.js .reveal.in { opacity: 1; transform: none; filter: blur(0);
 .fund { margin-top: 12px; max-width: 46ch; }
 .fund a { color: var(--blue-hi); font-weight: 600; }
 .fund a:hover { color: var(--ink); }
+
+/* ---------- WebGL hero scene ("The Signal") ---------- */
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.ambient { z-index: -2; }                 /* sit behind the WebGL canvas */
+html.webgl .ring { display: none; }       /* the 3D ring replaces the CSS conic ring */
+@media (prefers-reduced-motion: reduce) { #scene { display: none; } }
