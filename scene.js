@@ -167,9 +167,14 @@ async function boot() {
   function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
 
-  // entrance: ring fills + scene fades in
-  gsap.fromTo(ringUniforms.uFill, { value: 0 }, { value: 0.88, duration: 2.6, ease: "expo.out", delay: 0.2 });
-  gsap.fromTo(world.scale, { x: 0.7, y: 0.7, z: 0.7 }, { x: 1, y: 1, z: 1, duration: 2.0, ease: "expo.out" });
+  // entrance: the ring DRAWS itself closed (0 -> full circle); once complete,
+  // scroll takes over and expands it.
+  let introDone = false;
+  gsap.fromTo(ringUniforms.uFill, { value: 0 }, {
+    value: 1.0, duration: 2.9, ease: "expo.out", delay: 0.25,
+    onComplete: () => { introDone = true; },
+  });
+  gsap.fromTo(world.scale, { x: 0.55, y: 0.55, z: 0.55 }, { x: 1, y: 1, z: 1, duration: 2.3, ease: "expo.out" });
 
   // ---- resize ----
   addEventListener("resize", () => {
@@ -206,9 +211,15 @@ async function boot() {
     world.rotation.y += ((target.x * 0.5) - world.rotation.y) * 0.05;
     world.rotation.x += ((target.y * 0.3 + scrollN * 0.5) - world.rotation.x) * 0.05;
     ring.rotation.z = -Math.PI / 2 - now * 0.00004;
-    camera.position.z = 9 + scrollN * 3.5; // dolly out as you scroll
+    // once the intro draw finishes, scroll EXPANDS the ring (it opens past the
+    // viewport) instead of dollying the camera. Smoothed toward the target.
+    if (introDone) {
+      const sTarget = 1 + Math.min(scrollN, 1) * 2.7;
+      world.scale.x += (sTarget - world.scale.x) * 0.08;
+      world.scale.y = world.scale.z = world.scale.x;
+    }
     // full-glory in the hero; fade back so lower sections stay clean + readable
-    canvas.style.opacity = String(1 - Math.min(scrollN * 1.6, 0.78));
+    canvas.style.opacity = String(1 - Math.min(scrollN * 1.6, 0.82));
 
     composer.render();
     requestAnimationFrame(loop);

@@ -302,9 +302,9 @@ footer { text-align: center; color: var(--faint); padding: 36px 0 56px; font-siz
 .rise { animation: rise .9s var(--ease) both; animation-delay: calc(var(--d, 0) * 1s); }
 @keyframes rise { from { opacity: 0; transform: translateY(16px); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
 
-html.js .reveal { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+html.js .reveal { opacity: 0; transform: translateY(34px) scale(0.965); filter: blur(10px); will-change: transform, opacity, filter; }
 html.js .reveal.in { opacity: 1; transform: none; filter: blur(0);
-  transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease); }
+  transition: opacity .85s var(--ease), transform 1s var(--ease), filter .85s var(--ease); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -348,3 +348,7 @@ html.js .reveal.in { opacity: 1; transform: none; filter: blur(0);
 .ambient { z-index: -2; }                 /* sit behind the WebGL canvas */
 html.webgl .ring { display: none; }       /* the 3D ring replaces the CSS conic ring */
 @media (prefers-reduced-motion: reduce) { #scene { display: none; } }
+
+/* App Store download button */
+.btn.appstore { display: inline-flex; align-items: center; gap: 8px; }
+.btn.appstore svg { margin-top: -2px; }
